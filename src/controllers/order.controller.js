@@ -1,5 +1,6 @@
 const Order = require('../models/Order');
 const Cart = require('../models/Cart');
+const { createNotification } = require('./notification.controller');
 
 // CREATE order
 exports.createOrder = async (req, res, next) => {
@@ -30,6 +31,13 @@ exports.createOrder = async (req, res, next) => {
     });
 
     await Cart.findOneAndDelete({ user: req.user.id });
+
+    await createNotification(
+      req.user.id,
+      'Order Placed Successfully',
+      `Your order #${order._id} has been placed and is being processed.`,
+      'order'
+    );
 
     res.status(201).json({ success: true, order });
   } catch (err) {
@@ -83,6 +91,14 @@ exports.updateOrderStatus = async (req, res, next) => {
     if (req.body.orderStatus === 'delivered') order.deliveredAt = Date.now();
 
     await order.save();
+
+    await createNotification(
+      order.user,
+      'Order Status Updated',
+      `Your order #${order._id} is now ${order.orderStatus}.`,
+      'delivery'
+    );
+
     res.json({ success: true, order });
   } catch (err) {
     next(err);
