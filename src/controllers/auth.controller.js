@@ -85,3 +85,11 @@ exports.changePassword = async (req, res, next) => {
     res.json({ success: true, message: 'Password changed successfully' });
   } catch (err) { next(err); }
 };
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find().select('-password -refreshToken').sort('-createdAt');
+    res.json({ success: true, count: users.length, users });
+  } catch (err) {
+    next(err);
+  }
+};

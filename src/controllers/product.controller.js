@@ -3,7 +3,10 @@ const Product = require('../models/Product');
 // CREATE product
 exports.createProduct = async (req, res, next) => {
   try {
-    const { name, description, price, category, stock, images } = req.body;
+    console.log('BODY:', req.body);
+    console.log('FILES:', req.files);
+    const { name, description, price, category, stock } = req.body;
+    const images = req.files ? req.files.map(file => file.path) : [];
 
     const product = await Product.create({
       name, description, price, category, stock, images,
@@ -12,6 +15,7 @@ exports.createProduct = async (req, res, next) => {
 
     res.status(201).json({ success: true, product });
   } catch (err) {
+    console.error('CREATE PRODUCT ERROR:', err.message);
     next(err);
   }
 };
@@ -66,9 +70,16 @@ exports.updateProduct = async (req, res, next) => {
       return next(err);
     }
 
-    const updated = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    const images = req.files && req.files.length > 0 ? req.files.map(file => file.path) : product.images;
+    const updated = await Product.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body, images },
+      { new: true, runValidators: true }
+    );
+
     res.json({ success: true, product: updated });
   } catch (err) {
+    console.error('UPDATE PRODUCT ERROR:', err.message);
     next(err);
   }
 };
