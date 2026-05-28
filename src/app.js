@@ -13,11 +13,15 @@ const limiter = rateLimit({
   message: { success: false, message: 'Too many requests, please try again later' },
 });
 
-app.use(helmet());
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'https://pecumat-admin-panel.vercel.app',
+  ],
   credentials: true,
 }));
+
 app.use(express.json());
 app.use(morgan('dev'));
 app.use('/api', limiter);
