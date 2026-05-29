@@ -37,6 +37,7 @@ app.use('/api/addresses', require('./routes/address.routes'));
 app.use('/api/notifications', require('./routes/notification.routes'));
 app.use('/api/dashboard', require('./routes/dashboard.routes'));
 app.use('/api/users', require('./routes/user.routes'));
+app.use('/api/otp', require('./routes/otp.routes'));
 
 app.use(notFound);
 app.use(errorHandler);
