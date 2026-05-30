@@ -7,12 +7,15 @@ const { errorHandler, notFound } = require('./middleware/error.middleware');
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
   message: { success: false, message: 'Too many requests, please try again later' },
 });
 
+app.use(helmet());
 app.use(cors({
   origin: [
     'http://localhost:3000',
@@ -21,7 +24,6 @@ app.use(cors({
   ],
   credentials: true,
 }));
-
 app.use(express.json());
 app.use(morgan('dev'));
 app.use('/api', limiter);
