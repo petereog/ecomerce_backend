@@ -1,18 +1,10 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp-relay.brevo.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendOTP = async (email, otp) => {
-  await transporter.sendMail({
-    from: `"Pecumat Foods" <${process.env.EMAIL_USER}>`,
+  await resend.emails.send({
+    from: 'Pecumat Foods <onboarding@resend.dev>',
     to: email,
     subject: 'Your Verification Code',
     html: `
