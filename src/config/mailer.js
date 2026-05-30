@@ -1,8 +1,8 @@
 const { Resend } = require('resend');
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 const sendOTP = async (email, otp) => {
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  
   await resend.emails.send({
     from: 'Pecumat Foods <onboarding@resend.dev>',
     to: email,
