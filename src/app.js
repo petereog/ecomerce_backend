@@ -41,6 +41,12 @@ app.use('/api/dashboard', require('./routes/dashboard.routes'));
 app.use('/api/users', require('./routes/user.routes'));
 app.use('/api/otp', require('./routes/otp.routes'));
 
+app.get('/api/debug', (req, res) => {
+  res.json({
+    resend: process.env.RESEND_API_KEY ? 'EXISTS' : 'MISSING',
+    node_env: process.env.NODE_ENV,
+  });
+});
 app.use(notFound);
 app.use(errorHandler);
 
